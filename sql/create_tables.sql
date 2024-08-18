@@ -47,7 +47,18 @@ create table ranked(
     primary key(tournament_id)
 )engine=innodb;
 
+drop table if exists eliminatory cascade;
+
 create table eliminatory(
     foreign key (tournament_id) references tournament(tournament_id),
     primary key(tournament_id)
 )engine=innodb;
+
+drop table if exists team cascade;
+
+create table team(
+    team_id int auto_increment primary key,
+    team_name varchar(50) not null
+)engine=innodb;
+
+drop table if exists teams_match cascade;
