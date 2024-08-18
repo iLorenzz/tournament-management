@@ -61,4 +61,46 @@ create table team(
     team_name varchar(50) not null
 )engine=innodb;
 
+drop table if exists match_table cascade;
+
+create table match_table(
+    match_table_id int auto_increment primary key
+)engine=innodb;
+
+drop table if exists players_match cascade;
+
+create table players_match(
+    constraint player1 
+    foreign key (player_id) references player(player_id),
+    constraint player2 
+    foreign key (player_id) references player(player_id),
+    player_match_date date not null,
+    player_match_hour varchar(7) not null,
+    time_match varchar(20),
+    foreign key (tournament_id) references tournament(tournament_id),
+    foreign key (brackt_id) references bracket(bracket_id),
+    fase varchar(15),
+    foreign key (match_table_id) references match_table(match_table_id),
+    constraint player_winner 
+    foreign key (player_id) references player(player_id),
+    primary key(player1, player2)
+)engine=innodb;
+
 drop table if exists teams_match cascade;
+
+create table teams_match(
+    constraint team1 
+    foreign key (team_id) references team(team_id),
+    constraint team2 
+    foreign key (team_id) references team(team_id),
+    team_match_date date not null,
+    team_match_hour varchar(7) not null,
+    time_match varchar(20),
+    foreign key (tournament_id) references tournament(tournament_id),
+    foreign key (brackt_id) references bracket(bracket_id),
+    fase varchar(15),
+    foreign key (match_table_id) references match_table(match_table_id),
+    constraint team_winner 
+    foreign key (team_id) references team(team_id),
+    primary key(team1, team2)
+)engine=innodb;
