@@ -15,13 +15,20 @@ create table player(
     foreign key (tournament_id) references tournament(tournament_id)
     statics varchar(50),
     constraint team
-    foreign key (team_id) references team(team_id),
+    foreign key (team_id) references team(team_id)
 )engine=innodb;
 
-drop table tournament(
+drop table if exists tournament;
+
+create table tournament(
     tournament_id int auto_increment primary key,
     tournament_name varchar(30) not null,
     max_players_num int not null,
     game varchar(200) not null,
-    
-)
+    tournament_type varchar(50) not null,
+    tournament_victory_weigth float(2) not null,
+    constraint player_winner 
+    foreign key (player_id) references player(player_id),
+    constraint team_winner
+    foreign key (team_id) references team(team_id)
+)engine=innodb;
