@@ -1,6 +1,6 @@
 use tournament
 
-drop table if exists player;
+drop table if exists player cascade;
 
 create table player(
     player_id int auto_increment primary key,
@@ -18,7 +18,7 @@ create table player(
     foreign key (team_id) references team(team_id)
 )engine=innodb;
 
-drop table if exists tournament;
+drop table if exists tournament cascade;
 
 create table tournament(
     tournament_id int auto_increment primary key,
@@ -31,4 +31,23 @@ create table tournament(
     foreign key (player_id) references player(player_id),
     constraint team_winner
     foreign key (team_id) references team(team_id)
+)engine=innodb;
+
+drop table if exists league cascade;
+
+create table league(
+    foreign key (tournament_id) references tournament(tournament_id),
+    primary key (tournament_id)
+)engine=innodb;
+
+drop table if exists ranked cascade;
+
+create table ranked(
+    foreign key (tournament_id) references tournament(tournament_id),
+    primary key(tournament_id)
+)engine=innodb;
+
+create table eliminatory(
+    foreign key (tournament_id) references tournament(tournament_id),
+    primary key(tournament_id)
 )engine=innodb;
