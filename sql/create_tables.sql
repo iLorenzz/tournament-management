@@ -104,3 +104,18 @@ create table teams_match(
     foreign key (team_id) references team(team_id),
     primary key(team1, team2)
 )engine=innodb;
+
+drop table if exists bracket cascade;
+
+create table bracket(
+    bracket_id int auto_increment primary key,
+    foreign key (tournament_id) references tournament(tournament_id)
+)engine=innodb;
+
+drop table if exists group casacde;
+
+create table group(
+    gorup_id int auto_increment,
+    foreign key (tournament_id) references tournament(tournament_id),
+    primary key(gorup_id, tournament_id)
+)engine=innodb;
