@@ -1,6 +1,6 @@
 use tournament
 
-drop table if exists player cascade;
+
 
 create table player(
     player_id int auto_increment primary key,
@@ -11,14 +11,21 @@ create table player(
     email varchar(100) not null unique,
     cell_phone varchar(14) not null unique,
     bith_date date not null,
-    constraint current_tournament 
-    foreign key (tournament_id) references tournament(tournament_id)
+    tournament_id int,
+    team_id int,
     statics varchar(50),
-    constraint team
     foreign key (team_id) references team(team_id)
+    on delete cascade
 )engine=innodb;
 
-drop table if exists tournament cascade;
+alter table player 
+add foreign key (tournament_id) references tournament(tournament_id)
+on delete cascade;
+
+alter table player
+add points int;
+
+drop table if exists tournament;
 
 create table tournament(
     tournament_id int auto_increment primary key,
@@ -27,32 +34,40 @@ create table tournament(
     game varchar(200) not null,
     tournament_type varchar(50) not null,
     tournament_victory_weigth float(2) not null,
-    constraint player_winner 
-    foreign key (player_id) references player(player_id),
-    constraint team_winner
+    player_id int,
+    team_id int, 
+    foreign key (player_id) references player(player_id)
+    on delete cascade,
     foreign key (team_id) references team(team_id)
+    on delete cascade
 )engine=innodb;
 
-drop table if exists league cascade;
+drop table if exists league;
 
-create table league(
-    foreign key (tournament_id) references tournament(tournament_id),
+/*create table league(
+    tournament_id int,
+    foreign key (tournament_id) references tournament(tournament_id)
+    on delete cascade,
     primary key (tournament_id)
 )engine=innodb;
 
 drop table if exists ranked cascade;
 
 create table ranked(
-    foreign key (tournament_id) references tournament(tournament_id),
+    tournament_id int,
+    foreign key (tournament_id) references tournament(tournament_id)
+    on delete cascade,
     primary key(tournament_id)
 )engine=innodb;
 
 drop table if exists eliminatory cascade;
 
 create table eliminatory(
-    foreign key (tournament_id) references tournament(tournament_id),
+    tournament_id,
+    foreign key (tournament_id) references tournament(tournament_id)
+    on delete cascade,
     primary key(tournament_id)
-)engine=innodb;
+)engine=innodb;*/
 
 drop table if exists team cascade;
 
@@ -70,38 +85,76 @@ create table match_table(
 drop table if exists players_match cascade;
 
 create table players_match(
+    player1 int,
     constraint player1 
-    foreign key (player_id) references player(player_id),
+    foreign key (player1) references player(player_id)
+    on delete cascade,
+
+    player2 int,
     constraint player2 
-    foreign key (player_id) references player(player_id),
+    foreign key (player2) references player(player_id)
+    on delete cascade,
+
     player_match_date date not null,
     player_match_hour varchar(7) not null,
     time_match varchar(20),
-    foreign key (tournament_id) references tournament(tournament_id),
-    foreign key (brackt_id) references bracket(bracket_id),
+    
+    tournament_id int,
+    foreign key (tournament_id) references tournament(tournament_id)
+    on delete cascade,
+
+    bracket_id int,
+    foreign key (bracket_id) references bracket(bracket_id)
+    on delete cascade,
+
     fase varchar(15),
-    foreign key (match_table_id) references match_table(match_table_id),
+
+    match_table_id int,
+    foreign key (match_table_id) references match_table(match_table_id)
+    on delete cascade,
+
+    player_winner int,
     constraint player_winner 
-    foreign key (player_id) references player(player_id),
+    foreign key (player_winner) references player(player_id),
     primary key(player1, player2)
 )engine=innodb;
 
 drop table if exists teams_match cascade;
 
 create table teams_match(
+    team1 int,
     constraint team1 
-    foreign key (team_id) references team(team_id),
+    foreign key (team1) references team(team_id)
+    on delete cascade,
+
+    team2 int,
     constraint team2 
-    foreign key (team_id) references team(team_id),
+    foreign key (team2) references team(team_id)
+    on delete cascade,
+
     team_match_date date not null,
     team_match_hour varchar(7) not null,
     time_match varchar(20),
-    foreign key (tournament_id) references tournament(tournament_id),
-    foreign key (brackt_id) references bracket(bracket_id),
+
+    tournament_id int,
+    foreign key (tournament_id) references tournament(tournament_id)
+    on delete cascade,
+
+    bracket_id int,
+    foreign key (bracket_id) references bracket(bracket_id)
+    on delete cascade,
+
     fase varchar(15),
-    foreign key (match_table_id) references match_table(match_table_id),
+
+    match_table_id int,
+    foreign key (match_table_id) references match_table(match_table_id)
+    on delete cascade,
+
+    team_winner int,
     constraint team_winner 
-    foreign key (team_id) references team(team_id),
+    foreign key (team_winner) references team(team_id)
+    on delete cascade,
+
     primary key(team1, team2)
 )engine=innodb;
 
@@ -109,13 +162,17 @@ drop table if exists bracket cascade;
 
 create table bracket(
     bracket_id int auto_increment primary key,
+    tournament_id int,
     foreign key (tournament_id) references tournament(tournament_id)
+    on delete cascade
 )engine=innodb;
 
-drop table if exists group casacde;
+drop table if exists the_groups;
 
-create table group(
-    gorup_id int auto_increment,
-    foreign key (tournament_id) references tournament(tournament_id),
-    primary key(gorup_id, tournament_id)
+create table the_groups(
+    group_id int auto_increment,
+    tournament_id int,
+    foreign key (tournament_id) references tournament(tournament_id)
+    on delete cascade,
+    primary key(group_id, tournament_id)
 )engine=innodb;
