@@ -1,7 +1,5 @@
 use tournament
 
-
-
 create table player(
     player_id int auto_increment primary key,
     player_name varchar(50) not null,
@@ -10,7 +8,7 @@ create table player(
     cpf varchar(11) not null unique,
     email varchar(100) not null unique,
     cell_phone varchar(14) not null unique,
-    bith_date date not null,
+    birth_date date not null,
     tournament_id int,
     team_id int,
     statics varchar(50),
@@ -176,3 +174,8 @@ create table the_groups(
     on delete cascade,
     primary key(group_id, tournament_id)
 )engine=innodb;
+
+create table employee(
+    employee_id int primary key,
+    employee_password varchar(100) not null
+);
