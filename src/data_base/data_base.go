@@ -7,7 +7,7 @@ import (
 )
 
 func Connect_db() (*sql.DB, error){
-	db, err := sql.Open("mysql", "******:******@/tournament_management?charset=utf8&parseTime=True&loc=Local")
+	db, err := sql.Open("mysql", "*********:*******@/tournament_management?charset=utf8&parseTime=True&loc=Local")
 	if err != nil{
 		return nil, err
 	}
