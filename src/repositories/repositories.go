@@ -43,14 +43,31 @@ func (repository Player) Create_player(player models.Player) (uint64, error){
 
 func (repository Player) Update_player(ID uint64, player models.Player) (error){
 	statement, err := repository.db.Prepare(
-		"update player set player_nick = ?, email = ?, cell_phone = ?",
+		"update player set player_nick = ?, email = ?, cell_phone = ? where player_id = ?",
 	)
 	if err != nil{
 		return err
 	}
 	defer statement.Close()
 
-	if _, err = statement.Exec(player.Nick, player.Email, player.Cell_phone);
+	if _, err = statement.Exec(player.Nick, player.Email, player.Cell_phone, ID);
+	err != nil{
+		return err
+	}
+
+	return nil
+}
+
+func (repository Player) Join_player_to_tournament(ID uint64, player models.Player) (error){
+	statement, err := repository.db.Prepare(
+		"update player set tournament_id = ? where = player_id = ?",
+	)
+	if err != nil{
+		return err
+	}
+	defer statement.Close()
+
+	if _, err = statement.Exec(player.Tournament, ID);
 	err != nil{
 		return err
 	}
